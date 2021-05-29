@@ -5,8 +5,125 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NuGetReferenceBuilder"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="480" Width="900"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="65*"/>
+            <ColumnDefinition Width="35*"/>
+        </Grid.ColumnDefinitions>
+
+        <!--Editor + Console-->
+        <TabControl>
+            <TabItem Header="Edit">
+                <TextBox Background="Aqua"></TextBox>
+            </TabItem>
+            <TabItem Header="Console">
+
+            </TabItem>
+        </TabControl>
+        
+        <!--User Panel-->
+        <Grid Grid.Column="1" Margin="0, 20, 0, 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="120"/>
+                <RowDefinition Height="200"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="100"/>
+            </Grid.RowDefinitions>
+
+            <!--User Panel: Project Selectors-->
+            <Grid Grid.Row="0" Margin="0, 0, 0, 20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="122"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Projects Type" Height="25" Margin="10,0"/>
+                <ComboBox Grid.Row="0" Grid.Column="1" 
+                          ItemsSource="{Binding Path=RepositoriesTypes}"
+                          SelectedValue="{Binding Path=RepositoriesType}" Height="25" Margin="10,0"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="WrapWithOverflow"
+                           Text="Projects root path (double-click to open folder dialog)" Margin="10,0"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Name="ProjectPathSelector" 
+                        Text="{Binding Path=RootPath}" 
+                        ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}"
+                        MouseDoubleClick="ProjectPathSelector_OnMouseDoubleClick" Height="25" Margin="10,0"/>
+            </Grid>
+
+            <!--User Panel: Git Conditions-->
+            <Grid Grid.Row="1" Margin="0, 20, 0, 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Git Conditions" Margin="10,0"/>
+
+                <!--User Panel: Git Conditions: Branches-->
+                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical">
+                    <TextBlock HorizontalAlignment="Center" Text="Master branch"/>
+                    <TextBox Text="{Binding Path=MasterBranchName}" Margin="10,0"/>
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Vertical">
+                    <TextBlock HorizontalAlignment="Center" Text="Feature branch"/>
+                    <TextBox Text="{Binding Path=FeatureBranchName}" Margin="10,0"/>
+                </StackPanel>
+
+                <!--User Panel: Git Conditions: Commit/Push-->
+                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Margin="10,0, 5, 0">
+                    <TextBlock HorizontalAlignment="Center" Text="Commit"/>
+                    <CheckBox IsChecked="{Binding Path=WillCommitChanges}" HorizontalAlignment="Center">
+                        <CheckBox.LayoutTransform>
+                            <ScaleTransform ScaleX="2" ScaleY="2"/>
+                        </CheckBox.LayoutTransform>
+                    </CheckBox>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Vertical" Margin="5,0, 10, 0">
+                    <TextBlock HorizontalAlignment="Center" Text="Push"/>
+                    <CheckBox IsChecked="{Binding Path=WillPushChanges}" HorizontalAlignment="Center">
+                        <CheckBox.LayoutTransform>
+                            <ScaleTransform ScaleX="2" ScaleY="2"/>
+                        </CheckBox.LayoutTransform>
+                    </CheckBox>
+                </StackPanel>
+
+                <!--User Panel: Git Conditions: Update submodules/Crete pull request-->
+                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Vertical" Margin="10, 0, 5,0">
+                    <TextBlock HorizontalAlignment="Center" Text="Update"/>
+                    <TextBlock HorizontalAlignment="Center" Text="submodules"/>
+                    <CheckBox IsChecked="{Binding Path=WillUpdateSubmodules}" HorizontalAlignment="Center">
+                        <CheckBox.LayoutTransform>
+                            <ScaleTransform ScaleX="2" ScaleY="2"/>
+                        </CheckBox.LayoutTransform>
+                    </CheckBox>
+                </StackPanel>
+                <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Vertical" Margin="5,0, 10, 0">
+                    <TextBlock HorizontalAlignment="Center" Text="Pull"/>
+                    <TextBlock HorizontalAlignment="Center" Text="Request"/>
+                    <CheckBox IsChecked="{Binding Path=WillCreatePullRequest}" HorizontalAlignment="Center">
+                        <CheckBox.LayoutTransform>
+                            <ScaleTransform ScaleX="2" ScaleY="2"/>
+                        </CheckBox.LayoutTransform>
+                    </CheckBox>
+                </StackPanel>
+                
+            </Grid>
+
+            <Button Grid.Row="3" Content="RUN SCRIPT"
+                    Width="120" Height="40" HorizontalAlignment="Right" Margin="0, 0, 10, 0"/>
+        </Grid>
 
     </Grid>
 </Window>
