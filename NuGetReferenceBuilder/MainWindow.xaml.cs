@@ -1,11 +1,15 @@
 ﻿namespace NuGetReferenceBuilder
 {
+    using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
     using System.Windows;
     using System.Windows.Forms;
+    using System.Xml;
     using Annotations;
+    using Model;
 
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
@@ -67,6 +71,26 @@
                 this.NugetPackageReferences.Add(nugetPackageReference);
             }
         }
+        
+        private void RunScriptButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            // TODO: warn that unstaged changes in repos will be lost, and ask user confirmation
+            
+            var parameters = new Parameters
+            {
+                RepositoriesType = this.RepositoriesType,
+                RootPath = this.RootPath,
+                MasterBranchName = this.MasterBranchName,
+                FeatureBranchName = this.FeatureBranchName,
+                WillCommitChanges = this.WillCommitChanges,
+                WillPushChanges = this.WillPushChanges,
+                WillUpdateSubmodules = this.WillUpdateSubmodules,
+                WillCreatePullRequest = this.WillCreatePullRequest
+            };
+            var runner = new PowershellScriptRunner();
+            runner.Run(parameters, this.NugetPackageReferences);
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
