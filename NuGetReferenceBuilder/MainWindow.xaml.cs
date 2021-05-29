@@ -40,6 +40,14 @@
             }
         }
 
+        private void ResetFileButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            foreach (var nugetPackageReference in this.NugetPackageReferences)
+            {
+                nugetPackageReference.TargetVersion = nugetPackageReference.CurrentVersion;
+            }
+        }
+
         private void OpenFileButton_OnClick(object sender, RoutedEventArgs e)
         {
 
