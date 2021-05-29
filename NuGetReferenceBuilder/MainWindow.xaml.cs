@@ -9,7 +9,9 @@
 
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        public bool IsFileLoaded { get; set; } = false;
+        public bool IsFileLoaded { get; set; }
+        public ObservableCollection<NugetPackageReference> NugetPackageReferences { get; set; }
+        public string ConsoleLogs { get; set; }
 
         public List<string> RepositoriesTypes { get; } = new() {"Domain", "Application", "API"};
         public string RepositoriesType { get; set; } = "Domain";
@@ -24,6 +26,7 @@
 
         public MainWindow()
         {
+            this.NugetPackageReferences = new ObservableCollection<NugetPackageReference>();
             this.InitializeComponent();
         }
 
@@ -37,6 +40,25 @@
             }
         }
 
+        private void OpenFileButton_OnClick(object sender, RoutedEventArgs e)
+        {
+
+            var doc = new XmlDocument();
+            doc.Load("C:\\_dev\\WhiteLabel\\API\\NS.Booking.Booking.API\\src\\CustomLogic\\CustomLogic.csproj");
+            var elemList = doc.GetElementsByTagName("PackageReference");
+            for (int i=0; i < elemList.Count; i++)
+            {
+                var packageName = elemList[i].Attributes[0].InnerText;
+                var packageVersion = elemList[i].InnerText;
+                var nugetPackageReference = new NugetPackageReference
+                {
+                    Name = packageName,
+                    CurrentVersion = packageVersion,
+                    TargetVersion = packageVersion
+                };
+                this.NugetPackageReferences.Add(nugetPackageReference);
+            }
+        }
         public event PropertyChangedEventHandler? PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
